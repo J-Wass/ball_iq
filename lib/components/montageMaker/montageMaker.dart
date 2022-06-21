@@ -1,4 +1,5 @@
 import 'package:ball_iq/components/datePicker.dart';
+import 'package:ball_iq/utils/screenUtils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ball_iq/common/constants.dart';
@@ -24,7 +25,10 @@ class MontageMaker extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: SingleChildScrollView(
+        child: Container(
+          margin: isTallScreen(context)
+              ? EdgeInsets.only(top: 100)
+              : EdgeInsets.only(top: 10),
           child: Column(
             children: [
               SelectableText("Montage Maker", style: TextStyle(fontSize: 32)),

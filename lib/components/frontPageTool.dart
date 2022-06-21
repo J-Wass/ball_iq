@@ -111,8 +111,19 @@ class FrontPageDisplay extends StatelessWidget {
     // Filter tools by the data stored in ToolFilter state.
     if (context.watch<ToolFilter>().filter != null &&
         context.watch<ToolFilter>().filter.toString().isNotEmpty) {
-      tools.removeWhere((tool) => !tool.toolData.title.toLowerCase().contains(
-          context.watch<ToolFilter>().filter.toString().toLowerCase()));
+      List<String> terms = context
+          .watch<ToolFilter>()
+          .filter
+          .toString()
+          .toLowerCase()
+          .split(' ');
+      tools = tools.where((FrontPageTool tool) {
+        List<String> titleTerms = tool.toolData.title.toLowerCase().split(' ');
+        List<String> subtitleTerms =
+            tool.toolData.subtitle.toLowerCase().split(' ');
+        return terms.any((term) =>
+            titleTerms.contains(term) || subtitleTerms.contains(term));
+      }).toList();
     }
 
     return Container(

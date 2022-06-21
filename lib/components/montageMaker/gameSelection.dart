@@ -10,33 +10,56 @@ import 'package:ball_iq/state/state.dart';
 import 'package:provider/provider.dart';
 
 // Represents a specific game that can be selected for a montage.
-class IndividualGameSelection extends StatelessWidget {
+class MontageGameSelectWidget extends StatefulWidget {
+  const MontageGameSelectWidget({super.key, required this.scoreboard});
+
   final Scoreboard scoreboard;
-  const IndividualGameSelection({super.key, required this.scoreboard});
+
+  @override
+  _IndividualGameSelection createState() => _IndividualGameSelection();
+}
+
+class _IndividualGameSelection extends State<MontageGameSelectWidget> {
+  bool _isHovering = false;
+
+  void setIsHovering(isHovering) {
+    setState(() {
+      _isHovering = isHovering;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool selected =
-        scoreboard.gameId == Provider.of<MontageGame>(context).gameId;
-    return Container(
-      height: 130,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          border: Border.all(
-              width: 0, color: selected ? themePrimary : Colors.transparent)),
-      child: InkWell(
-          focusColor: selected ? themePrimary : Colors.transparent,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          splashColor: Color.fromARGB(
-              120, themePrimary.red, themePrimary.green, themePrimary.blue),
+    bool isSelected =
+        widget.scoreboard.gameId == context.watch<MontageGame>().gameId;
+    return MouseRegion(
+      onEnter: (event) => setIsHovering(true),
+      onExit: (event) => setIsHovering(false),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  color: isSelected || _isHovering
+                      ? themePrimary.withOpacity(0.50)
+                      : Colors.transparent,
+                  style: BorderStyle.solid,
+                  width: 2.0)),
+          //borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: GestureDetector(
           onTap: () {
-            playerData(scoreboard.gameId).then((List<PlayerBoxScore> players) {
-              context.read<MontageGame>().set(scoreboard.gameId, players);
+            playerData(widget.scoreboard.gameId)
+                .then((List<PlayerBoxScore> players) {
+              context
+                  .read<MontageGame>()
+                  .set(widget.scoreboard.gameId, players);
             });
           },
           child: ScoreboardComponent(
-            scoreboard: scoreboard,
-          )),
+            scoreboard: widget.scoreboard,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -50,24 +73,38 @@ class GameSelection extends StatelessWidget {
     List<Scoreboard> scores =
         context.watch<FrontPageScoreboardState>().scoreboard ?? [];
 
-    double target_width =
-        min(MediaQuery.of(context).size.width - 20, scores.length * 300.0);
+    var scrollController = ScrollController();
 
     return Container(
-        height: 130.0,
-        margin: EdgeInsets.only(bottom: 25),
-        width: target_width,
-        child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemCount: scores.length,
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          //shrinkWrap: true,
-          itemBuilder: (_, int i) {
-            return Container(
-                margin: EdgeInsets.only(left: 5, right: 5),
-                child: IndividualGameSelection(scoreboard: scores[i]));
-          },
-        ));
+      margin: EdgeInsets.only(bottom: 20),
+      child: Scrollbar(
+        scrollbarOrientation: ScrollbarOrientation.top,
+        radius: Radius.circular(0.0),
+        controller: scrollController,
+        thumbVisibility: true,
+        trackVisibility: true,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+            height: 140.0,
+            padding:
+                EdgeInsets.only(top: 8), // 10 for padding, minus 2 for border
+            width: min(
+                MediaQuery.of(context).size.width - 20, scores.length * 300.0),
+            child: ListView.builder(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              itemCount: scores.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (_, int i) {
+                return Container(
+                    margin: EdgeInsets.only(left: 5, right: 5),
+                    child: MontageGameSelectWidget(scoreboard: scores[i]));
+              },
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

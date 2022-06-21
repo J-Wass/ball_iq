@@ -21,6 +21,7 @@ class DatePicker extends StatelessWidget {
         .then((dateSelected) {
       if (dateSelected != null) {
         context.read<DateSelect>().set(dateSelected);
+        context.read<FrontPageScoreboardState>().markIsLoading(true);
         gameData(dateSelected).then((List<Scoreboard> allGames) {
           context.read<FrontPageScoreboardState>().set(allGames);
         });

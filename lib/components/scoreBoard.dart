@@ -18,16 +18,16 @@ class ScoreboardComponent extends StatelessWidget {
       height: 130,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           bottomLeft: Radius.circular(20),
         ),
         boxShadow: [
           BoxShadow(
-            color: Color.fromARGB(255, 89, 89, 89).withOpacity(0.5),
+            color: const Color.fromARGB(255, 89, 89, 89).withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 2,
-            offset: Offset(2, 2), // changes position of shadow
+            offset: const Offset(2, 2), // changes position of shadow
           ),
         ],
       ),
@@ -35,66 +35,69 @@ class ScoreboardComponent extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10),
       child: Row(
         children: [
+          // Team Logos.
           Container(
             width: 50,
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   child: Image.network(
-                      height: 50, nbaImageUrlForTeamId(scoreboard.team1Id)),
+                      height: 45, nbaImageUrlForTeamId(scoreboard.team1Id)),
                 ),
                 Container(
                   child: Image.network(
-                      height: 50, nbaImageUrlForTeamId(scoreboard.team2Id)),
+                      height: 45, nbaImageUrlForTeamId(scoreboard.team2Id)),
                 ),
               ],
             ),
           ),
+          // Team cities.
           Container(
             width: 125,
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 15, left: 5),
+                  margin: const EdgeInsets.only(top: 15, left: 5),
                   child: Text(
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 18),
                       scoreboard.team1),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 20, left: 5),
+                  margin: const EdgeInsets.only(top: 20, left: 5),
                   child: Text(
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 18),
                       scoreboard.team2),
                 )
               ],
             ),
           ),
+          // Team Scores
           Container(
             width: 54,
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 5),
-                  padding:
-                      EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                  margin: const EdgeInsets.only(left: 5),
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, top: 5, bottom: 5),
                   height: 110,
                   color: brightInactiveBackground,
                   child: Column(children: [
                     Text(
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.bold),
                         scoreboard.timeString),
                     Container(
                         child: Text(
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                             scoreboard.team1Score)),
                     Container(
-                        margin: EdgeInsets.only(top: 25),
+                        margin: const EdgeInsets.only(top: 25),
                         child: Text(
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                             scoreboard.team2Score)),
                   ]),
                 )
@@ -115,28 +118,48 @@ class ScoreboardDisplay extends StatelessWidget {
     List<Scoreboard> scoreboard =
         context.watch<FrontPageScoreboardState>().scoreboard ?? [];
 
+    bool isLoading = context.watch<FrontPageScoreboardState>().isLoading;
+
     return MouseRegion(
-      cursor: SystemMouseCursors.grab,
+      cursor: isLoading || scoreboard.isEmpty
+          ? SystemMouseCursors.precise
+          : SystemMouseCursors.grab,
       child: Container(
           decoration: BoxDecoration(
             border: Border(
               left:
                   BorderSide(width: 1.0, color: Colors.white.withOpacity(0.5)),
-              right: BorderSide(width: 1.0, color: inactiveBackground),
             ),
           ),
           height: 130,
-          child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: scoreboard.length,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            itemBuilder: (_, int i) {
-              return Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: ScoreboardComponent(scoreboard: scoreboard[i]));
-            },
-          )),
+          child: isLoading
+              ? const SizedBox(
+                  width: 30,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                        semanticsLabel: 'Linear progress indicator',
+                        color: themePrimary),
+                  ),
+                )
+              : scoreboard.isEmpty
+                  ? const Center(
+                      child: Text(
+                          style: TextStyle(
+                              color: brightInactiveBackground, fontSize: 18),
+                          "No games today..."),
+                    )
+                  : ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: scoreboard.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (_, int i) {
+                        return Container(
+                            margin: const EdgeInsets.only(left: 15),
+                            child:
+                                ScoreboardComponent(scoreboard: scoreboard[i]));
+                      },
+                    )),
     );
   }
 }

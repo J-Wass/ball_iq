@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ball_iq/components/datePicker.dart';
 import 'package:ball_iq/services/nbaStatsService.dart';
 import 'package:flutter/material.dart';
@@ -7,43 +9,97 @@ import 'package:ball_iq/common/constants.dart';
 import 'package:ball_iq/state/state.dart';
 import 'package:provider/provider.dart';
 
-// Represents a specific game that can be selected for a montage.
-class IndividualPlayerSelection extends StatelessWidget {
+// Represents a specific player that can be selected for a montage.
+class MontagePlayerSelectWidget extends StatefulWidget {
+  const MontagePlayerSelectWidget({super.key, required this.player});
+
   final PlayerBoxScore player;
-  const IndividualPlayerSelection({super.key, required this.player});
+
+  @override
+  _IndividualPlayerSelection createState() => _IndividualPlayerSelection();
+}
+
+class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
+  bool _isHovering = false;
+
+  void setIsHovering(isHovering) {
+    setState(() {
+      _isHovering = isHovering;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        splashColor: Color.fromARGB(
-            120, themePrimary.red, themePrimary.green, themePrimary.blue),
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
-        onTap: () {},
-        child: Text(player.playername));
+    bool isSelected =
+        widget.player.playerId == context.watch<MontagePlayer>().playerId;
+    return MouseRegion(
+      onEnter: (event) => setIsHovering(true),
+      onExit: (event) => setIsHovering(false),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  color: isSelected || _isHovering
+                      ? themePrimary.withOpacity(0.50)
+                      : Colors.transparent,
+                  style: BorderStyle.solid,
+                  width: 2.0)),
+          //borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            context
+                .read<MontagePlayer>()
+                .set(widget.player.playerId, widget.player.playername);
+          },
+          child: Text(widget.player.playername),
+        ),
+      ),
+    );
   }
 }
 
-/// Represents all the games that can be selected for a montage.
+/// Represents all the players that can be selected for a montage.
 class PlayerSelection extends StatelessWidget {
   const PlayerSelection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<PlayerBoxScore> playerBoxScores = context.watch<MontageGame>().players;
+    List<PlayerBoxScore> players = context.watch<MontageGame>().players;
+
+    var scrollController = ScrollController();
 
     return Container(
-        height: 130.0,
-        width: MediaQuery.of(context).size.width - 20,
-        child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemCount: playerBoxScores.length,
-          scrollDirection: Axis.horizontal,
-          //shrinkWrap: true,
-          itemBuilder: (_, int i) {
-            return Container(
-                child: IndividualPlayerSelection(player: playerBoxScores[i]));
-          },
-        ));
+      margin: EdgeInsets.only(bottom: 20),
+      child: Scrollbar(
+        scrollbarOrientation: ScrollbarOrientation.top,
+        radius: Radius.circular(0.0),
+        controller: scrollController,
+        thumbVisibility: true,
+        trackVisibility: true,
+        interactive: true,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Container(
+            height: 140.0,
+            padding:
+                EdgeInsets.only(top: 8), // 10 for padding, minus 2 for border
+            width: min(
+                MediaQuery.of(context).size.width - 20, players.length * 300.0),
+            child: ListView.builder(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              itemCount: players.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (_, int i) {
+                return Container(
+                    margin: EdgeInsets.only(left: 5, right: 5),
+                    child: MontagePlayerSelectWidget(player: players[i]));
+              },
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

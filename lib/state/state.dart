@@ -52,21 +52,32 @@ class FrontPageScoreboardState with ChangeNotifier, DiagnosticableTreeMixin {
   List<Scoreboard>? _scoreboard;
   List<Scoreboard>? get scoreboard => _scoreboard;
 
-  void set(List<Scoreboard> scoreboard) {
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  /// Sets the scoreboard data for the app.
+  void set(List<Scoreboard> scoreboard, [bool isLoading = false]) {
     _scoreboard = scoreboard;
+    _isLoading = isLoading;
+    notifyListeners();
+  }
+
+  // Sets whether the scoreboard is loading.
+  void markIsLoading(bool isLoading) {
+    _isLoading = isLoading;
     notifyListeners();
   }
 }
 
 /// Stores the selected player for making a montage.
 class MontagePlayer with ChangeNotifier, DiagnosticableTreeMixin {
-  int _playerId = -1;
-  int get playerId => _playerId;
+  String _playerId = "";
+  String get playerId => _playerId;
 
-  String? _playerName;
-  String? get playerName => _playerName;
+  String _playerName = "";
+  String get playerName => _playerName;
 
-  void set(int playerId, String playerName) {
+  void set(String playerId, String playerName) {
     _playerId = playerId;
     _playerName = playerName;
     notifyListeners();

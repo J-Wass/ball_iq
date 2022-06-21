@@ -42,7 +42,7 @@ class _FrontPageSearch extends State<FrontPageSearchForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color.fromARGB(50, 255, 255, 255),
+        color: Color.fromARGB(20, 255, 255, 255),
         margin: EdgeInsets.only(
             top: isTallScreen(context) && !isMobileScreen(context) ? 160 : 20),
         child: TextField(

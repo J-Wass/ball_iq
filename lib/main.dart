@@ -36,8 +36,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // for testing only
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      context.read<DateSelect>().set(DateTime.parse("2022-03-11 00:00:00.000"));
+      context.read<FrontPageScoreboardState>().markIsLoading(true);
+      gameData(DateTime.parse("2022-03-11 00:00:00.000"))
+          .then((List<Scoreboard> allGames) {
+        context.read<FrontPageScoreboardState>().set(allGames);
+      });
+    });
     return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+          useMaterial3: true,
+          scrollbarTheme: ScrollbarThemeData(
+              thumbVisibility: MaterialStateProperty.all(true),
+              trackVisibility: MaterialStateProperty.all(true),
+              thickness: MaterialStateProperty.all(8.0),
+              radius: const Radius.circular(0.0),
+              thumbColor: MaterialStateProperty.all(
+                darkText.withOpacity(0.5),
+              ),
+              trackColor: MaterialStateProperty.all(
+                themePrimary.withOpacity(0.25),
+              ))),
       scrollBehavior: TotalScrollBehavior(),
       initialRoute: '/',
       routes: {
@@ -64,39 +85,43 @@ class HomePage extends StatelessWidget {
       ),
       body: MouseRegion(
         cursor: SystemMouseCursors.precise,
+        // This part is wack. I use a stack to make a cool background.
+        // Layer 1: gif image.
+        // Layer 2: gradient background.
+        // Layer 3: Actual widgets for the site.
         child: Stack(
           children: [
+            // Layer 1: gif background.
             Container(
               height: MediaQuery.of(context).size.height - 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.transparent,
                 image: DecorationImage(
                   image: AssetImage("assets/dunk_background.gif"),
                   fit: BoxFit.cover,
                 ),
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const TopBar(),
-                    FrontPageAdvertisement(),
-                    const FrontPageSearchForm(),
-                    FrontPageDisplay(),
-                  ],
-                ),
-              ),
             ),
-            IgnorePointer(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          Colors.transparent,
-                          themePrimary.withAlpha(150),
-                        ])),
+            // Layer 2: gradient background.
+            Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                    Colors.transparent,
+                    themePrimary.withAlpha(250),
+                  ])),
+            ),
+            // Layer 3: side widgets
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  const TopBar(),
+                  FrontPageAdvertisement(),
+                  const FrontPageSearchForm(),
+                  FrontPageDisplay(),
+                ],
               ),
             )
           ],

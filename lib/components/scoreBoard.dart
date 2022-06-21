@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:developer';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:ball_iq/common/constants.dart';
 import 'package:ball_iq/state/state.dart';
@@ -40,14 +41,18 @@ class ScoreboardComponent extends StatelessWidget {
             width: 50,
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: Image.network(
-                      height: 45, nbaImageUrlForTeamId(scoreboard.team1Id)),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: SvgPicture.network(
+                        height: 45, teamImageUrl(scoreboard.team1Id)),
+                  ),
                 ),
-                Container(
-                  child: Image.network(
-                      height: 45, nbaImageUrlForTeamId(scoreboard.team2Id)),
+                Expanded(
+                  child: Container(
+                    child: SvgPicture.network(
+                        height: 45, teamImageUrl(scoreboard.team2Id)),
+                  ),
                 ),
               ],
             ),
@@ -57,19 +62,23 @@ class ScoreboardComponent extends StatelessWidget {
             width: 125,
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 15, left: 5),
-                  child: Text(
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 18),
-                      scoreboard.team1),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    child: Text(
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(fontSize: 18),
+                        scoreboard.team1),
+                  ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20, left: 5),
-                  child: Text(
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 18),
-                      scoreboard.team2),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Text(
+                        textAlign: TextAlign.left,
+                        style: const TextStyle(fontSize: 18),
+                        scoreboard.team2),
+                  ),
                 )
               ],
             ),

@@ -52,23 +52,9 @@ class PlayerBoxScore {
       this.fieldGoalPercent);
 }
 
-/// Returns a url pointing to an image file for a given team name.
-String nbaImageUrlForTeamId(String teamId) {
-  return "https://cdn.nba.com/logos/nba/${teamId}/primary/D/logo.svg";
-}
-
-Future<Response> _nbaStatsResponse(
-    String endpoint, Map<String, String> queryParams) {
-  List components = [];
-  queryParams.forEach((query, value) {
-    components.add('$query=$value');
-  });
-  String escapedUrl = Uri.encodeQueryComponent(
-      'stats.nba.com/stats/$endpoint?${components.join('&')}');
-
-  // No idea, but I need to add "25" after every escape???
-  escapedUrl = escapedUrl.replaceAll("%", "%25");
-  Uri statsUri = Uri.parse('http://localhost:5000/proxy/$escapedUrl');
+/// Makes an HTTP GET request through the server proxy.
+Future<Response> _getRequest(String url) async {
+  Uri formattedUri = Uri.parse(_formattedUrl(url, true));
 
   // Headers required for the proxy server to accept http requests.
   final Map<String, String> proxyHeaders = {
@@ -77,7 +63,39 @@ Future<Response> _nbaStatsResponse(
     "Access-Control-Allow-Headers": "*",
     "Access-Control-Allow-Methods": "GET"
   };
-  return http.get(statsUri, headers: proxyHeaders);
+  return http.get(formattedUri, headers: proxyHeaders);
+}
+
+/// Takes a url and returns it for use in the server proxy.
+String _formattedUrl(String url, bool useStatsNbaHeaders) {
+  String escapedUrl = Uri.encodeQueryComponent(url);
+  String route = useStatsNbaHeaders ? "proxy" : "proxy/headerless";
+
+  // No idea, but I need to add "25" after every escape???
+  escapedUrl = escapedUrl.replaceAll("%", "%25");
+  return 'http://localhost:5000/${route}/$escapedUrl';
+}
+
+/// Returns a url pointing to an image file for a given team name.
+/// TODO find another source of team images, these svgs have <style> tags that can't be used.
+String teamImageUrl(String teamId) {
+  return _formattedUrl(
+      "cdn.nba.com/logos/nba/${teamId}/primary/D/logo.svg", false);
+}
+
+String playerImageUrl(String playerId) {
+  return _formattedUrl(
+      "cdn.nba.com/headshots/nba/latest/1040x760/${playerId}.png", false);
+}
+
+Future<Response> _nbaStatsResponse(
+    String endpoint, Map<String, String> queryParams) {
+  List components = [];
+  queryParams.forEach((query, value) {
+    components.add('$query=$value');
+  });
+  String finalUrl = 'stats.nba.com/stats/$endpoint?${components.join('&')}';
+  return _getRequest(finalUrl);
 }
 
 Future<List<PlayerBoxScore>> playerData(String gameId) async {

@@ -7,6 +7,7 @@ import 'package:ball_iq/components/scoreBoard.dart';
 
 import 'package:ball_iq/common/constants.dart';
 import 'package:ball_iq/state/state.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 // Represents a specific player that can be selected for a montage.
@@ -33,6 +34,7 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
     bool isSelected =
         widget.player.playerId == context.watch<MontagePlayer>().playerId;
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (event) => setIsHovering(true),
       onExit: (event) => setIsHovering(false),
       child: Container(
@@ -44,7 +46,6 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
                       : Colors.transparent,
                   style: BorderStyle.solid,
                   width: 2.0)),
-          //borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: GestureDetector(
           onTap: () {
@@ -52,7 +53,21 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
                 .read<MontagePlayer>()
                 .set(widget.player.playerId, widget.player.playername);
           },
-          child: Text(widget.player.playername),
+          child: Container(
+              width: 150,
+              child: Column(
+                children: [
+                  Stack(children: [
+                    Image.network(playerImageUrl(widget.player.playerId)),
+                    SvgPicture.network(teamImageUrl(widget.player.teamId)),
+                  ]),
+                  Center(
+                      child: Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                          widget.player.playername))
+                ],
+              )),
         ),
       ),
     );
@@ -81,7 +96,7 @@ class PlayerSelection extends StatelessWidget {
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            height: 140.0,
+            height: 500.0,
             padding:
                 EdgeInsets.only(top: 8), // 10 for padding, minus 2 for border
             width: min(
@@ -93,7 +108,7 @@ class PlayerSelection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: (_, int i) {
                 return Container(
-                    margin: EdgeInsets.only(left: 5, right: 5),
+                    margin: EdgeInsets.only(left: 5, right: 5, top: 5),
                     child: MontagePlayerSelectWidget(player: players[i]));
               },
             ),

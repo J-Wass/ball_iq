@@ -38,7 +38,21 @@ def proxy(url):
       return cache[url]
 
     absolute_url = "https://" + urllib.parse.unquote(url)
-    data = requests.get(url=absolute_url, headers=stats_nba_headers).content
+    print(absolute_url)
+    data = requests.get(url=absolute_url, headers=stats_nba_headers, timeout=5).content
+    print(len(data))
+    cache[url] = data
+    return data
+
+@app.get("/proxy/headerless/<url>")
+def proxyHeaderless(url):
+    if url in cache:
+      return cache[url]
+
+    absolute_url = "https://" + urllib.parse.unquote(url)
+    print(absolute_url)
+    data = requests.get(url=absolute_url, timeout=5).content
+    print(len(data))
     cache[url] = data
     return data
 

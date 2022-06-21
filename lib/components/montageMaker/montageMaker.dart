@@ -29,15 +29,17 @@ class MontageMaker extends StatelessWidget {
           margin: isTallScreen(context)
               ? EdgeInsets.only(top: 100)
               : EdgeInsets.only(top: 10),
-          child: Column(
-            children: [
-              SelectableText("Montage Maker", style: TextStyle(fontSize: 32)),
-              DatePicker(),
-              GameSelection(),
-              PlayerSelection(),
-              StatSelection(),
-              Text("Go!")
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SelectableText("Montage Maker", style: TextStyle(fontSize: 32)),
+                DatePicker(),
+                GameSelection(),
+                PlayerSelection(),
+                StatSelection(),
+                Text("Go!")
+              ],
+            ),
           ),
         ),
       ),

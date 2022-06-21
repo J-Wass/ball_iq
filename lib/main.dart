@@ -43,6 +43,10 @@ class MyApp extends StatelessWidget {
       gameData(DateTime.parse("2022-03-11 00:00:00.000"))
           .then((List<Scoreboard> allGames) {
         context.read<FrontPageScoreboardState>().set(allGames);
+
+        playerData("0022100997").then((List<PlayerBoxScore> players) {
+          context.read<MontageGame>().set("0022100997", players);
+        });
       });
     });
     return MaterialApp(
@@ -51,7 +55,7 @@ class MyApp extends StatelessWidget {
           scrollbarTheme: ScrollbarThemeData(
               thumbVisibility: MaterialStateProperty.all(true),
               trackVisibility: MaterialStateProperty.all(true),
-              thickness: MaterialStateProperty.all(8.0),
+              thickness: MaterialStateProperty.all(2.0),
               radius: const Radius.circular(0.0),
               thumbColor: MaterialStateProperty.all(
                 darkText.withOpacity(0.5),

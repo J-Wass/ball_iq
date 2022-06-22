@@ -1,11 +1,15 @@
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
 import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/components/datePicker.dart';
-import 'package:ball_iq/components/scoreBoard.dart';
+import 'package:ball_iq/components/home/scoreBoard.dart';
 import 'package:ball_iq/state/state.dart';
+import '../common/datePicker.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({Key? key}) : super(key: key);

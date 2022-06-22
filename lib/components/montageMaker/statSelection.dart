@@ -1,10 +1,5 @@
-import 'package:ball_iq/components/datePicker.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
-
-import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/components/montageMaker/gameSelection.dart';
-import 'package:ball_iq/components/montageMaker/playerSelection.dart';
-import 'package:ball_iq/components/montageMaker/statSelection.dart';
 
 class StatSelection extends StatelessWidget {
   const StatSelection({super.key});

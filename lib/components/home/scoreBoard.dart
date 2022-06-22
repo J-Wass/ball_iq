@@ -1,12 +1,17 @@
+// Dart imports:
+import 'dart:developer';
+
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'dart:developer';
-import 'package:flutter_svg/flutter_svg.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/state/state.dart';
 import 'package:ball_iq/services/nbaStatsService.dart';
+import 'package:ball_iq/state/state.dart';
 
 class ScoreboardComponent extends StatelessWidget {
   final Scoreboard scoreboard;
@@ -43,14 +48,14 @@ class ScoreboardComponent extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: SvgPicture.network(
+                    margin: const EdgeInsets.only(top: 0),
+                    child: Image.network(
                         height: 45, teamImageUrl(scoreboard.team1Id)),
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    child: SvgPicture.network(
+                    child: Image.network(
                         height: 45, teamImageUrl(scoreboard.team2Id)),
                   ),
                 ),
@@ -73,7 +78,7 @@ class ScoreboardComponent extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 15),
                     child: Text(
                         textAlign: TextAlign.left,
                         style: const TextStyle(fontSize: 18),
@@ -145,9 +150,7 @@ class ScoreboardDisplay extends StatelessWidget {
               ? const SizedBox(
                   width: 30,
                   child: Center(
-                    child: CircularProgressIndicator(
-                        semanticsLabel: 'Linear progress indicator',
-                        color: themePrimary),
+                    child: CircularProgressIndicator(color: themePrimary),
                   ),
                 )
               : scoreboard.isEmpty

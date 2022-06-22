@@ -1,8 +1,10 @@
+// Flutter imports:
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
 
 /// Returns whether the current screen is for mobile.
 bool isMobileScreen(BuildContext context) {
@@ -22,7 +24,9 @@ class TotalScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
+        PointerDeviceKind.touch,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.unknown
       };
 }

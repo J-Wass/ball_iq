@@ -1,12 +1,17 @@
+// Dart imports:
 import 'dart:async';
 
-import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/utils/screenUtils.dart';
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
+import 'package:ball_iq/common/constants.dart';
 import 'package:ball_iq/state/state.dart';
+import 'package:ball_iq/utils/screenUtils.dart';
 
 class FrontPageSearchForm extends StatefulWidget {
   const FrontPageSearchForm({super.key});

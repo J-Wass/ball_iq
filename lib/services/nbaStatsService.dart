@@ -1,14 +1,19 @@
+// Dart imports:
 import 'dart:convert';
-import 'package:ball_iq/state/state.dart';
-import 'package:http/http.dart' as http;
 import 'dart:developer';
 
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
+// Project imports:
 import 'package:ball_iq/common/constants.dart';
+import 'package:ball_iq/state/state.dart';
 
 /// Encapsulation of data needed to construct a single scoreboard item.
 class Scoreboard {
@@ -79,8 +84,7 @@ String _formattedUrl(String url, bool useStatsNbaHeaders) {
 /// Returns a url pointing to an image file for a given team name.
 /// TODO find another source of team images, these svgs have <style> tags that can't be used.
 String teamImageUrl(String teamId) {
-  return _formattedUrl(
-      "cdn.nba.com/logos/nba/${teamId}/primary/D/logo.svg", false);
+  return "assets/teams/$teamId.png";
 }
 
 String playerImageUrl(String playerId) {

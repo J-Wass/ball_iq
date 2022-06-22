@@ -1,9 +1,13 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
 import 'package:ball_iq/common/constants.dart';
 import 'package:ball_iq/services/nbaStatsService.dart';
 

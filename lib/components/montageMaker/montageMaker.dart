@@ -1,14 +1,19 @@
-import 'package:ball_iq/components/datePicker.dart';
-import 'package:ball_iq/utils/screenUtils.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/state/state.dart';
-import 'package:ball_iq/services/nbaStatsService.dart';
 import 'package:ball_iq/components/montageMaker/gameSelection.dart';
 import 'package:ball_iq/components/montageMaker/playerSelection.dart';
 import 'package:ball_iq/components/montageMaker/statSelection.dart';
-import 'package:provider/provider.dart';
+import 'package:ball_iq/services/nbaStatsService.dart';
+import 'package:ball_iq/state/state.dart';
+import 'package:ball_iq/utils/screenUtils.dart';
+import '../common/background.dart';
+import '../common/datePicker.dart';
 
 class MontageMaker extends StatelessWidget {
   const MontageMaker({super.key});
@@ -24,25 +29,33 @@ class MontageMaker extends StatelessWidget {
           foregroundColor: darkText,
         ),
       ),
-      body: Center(
-        child: Container(
-          margin: isTallScreen(context)
-              ? EdgeInsets.only(top: 100)
-              : EdgeInsets.only(top: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SelectableText("Montage Maker", style: TextStyle(fontSize: 32)),
-                DatePicker(),
-                GameSelection(),
-                PlayerSelection(),
-                StatSelection(),
-                Text("Go!")
-              ],
+      body: Background(
+          color: themePrimary,
+          child:
+
+              // Layer 3: side widgets
+              SingleChildScrollView(
+            child: Center(
+              child: Container(
+                margin: isTallScreen(context)
+                    ? EdgeInsets.only(top: 100)
+                    : EdgeInsets.only(top: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text("Montage Maker",
+                          style: TextStyle(fontSize: 32, color: brightText)),
+                      DatePicker(),
+                      GameSelection(),
+                      PlayerSelection(),
+                      StatSelection(),
+                      Text("Go!")
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
+          )),
     );
   }
 }

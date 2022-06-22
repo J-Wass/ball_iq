@@ -1,10 +1,7 @@
+// Project imports:
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/components/datePicker.dart';
-import 'package:ball_iq/components/scoreBoard.dart';
 
 // TODO - add google ads
 

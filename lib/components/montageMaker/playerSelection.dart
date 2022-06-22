@@ -1,14 +1,16 @@
+// Dart imports:
 import 'dart:math';
 
-import 'package:ball_iq/components/datePicker.dart';
-import 'package:ball_iq/services/nbaStatsService.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:ball_iq/components/scoreBoard.dart';
 
-import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/state/state.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:ball_iq/common/constants.dart';
+import 'package:ball_iq/services/nbaStatsService.dart';
+import 'package:ball_iq/state/state.dart';
 
 // Represents a specific player that can be selected for a montage.
 class MontagePlayerSelectWidget extends StatefulWidget {
@@ -42,7 +44,7 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
           border: Border(
               bottom: BorderSide(
                   color: isSelected || _isHovering
-                      ? themePrimary.withOpacity(0.50)
+                      ? brightText.withOpacity(0.50)
                       : Colors.transparent,
                   style: BorderStyle.solid,
                   width: 2.0)),
@@ -54,20 +56,41 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
                 .set(widget.player.playerId, widget.player.playername);
           },
           child: Container(
-              width: 150,
-              child: Column(
-                children: [
-                  Stack(children: [
-                    Image.network(playerImageUrl(widget.player.playerId)),
-                    SvgPicture.network(teamImageUrl(widget.player.teamId)),
-                  ]),
-                  Center(
-                      child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16),
-                          widget.player.playername))
-                ],
-              )),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50.0),
+                  topRight: Radius.circular(50.0),
+                  bottomLeft: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    themePrimary.withOpacity(0.0),
+                    brightInactiveBackground.withOpacity(1),
+                  ],
+                )),
+            margin: EdgeInsets.only(bottom: 10),
+            width: 150,
+            child: Column(
+              children: [
+                Stack(children: [
+                  Image.network(playerImageUrl(widget.player.playerId)),
+                  SizedBox(
+                    width: 50,
+                    child: Image.network(teamImageUrl(widget.player.teamId)),
+                  ),
+                ]),
+                Expanded(
+                  child: Text(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                      widget.player.playername),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -96,7 +119,7 @@ class PlayerSelection extends StatelessWidget {
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            height: 500.0,
+            height: 300.0,
             padding:
                 EdgeInsets.only(top: 8), // 10 for padding, minus 2 for border
             width: min(

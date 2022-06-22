@@ -1,13 +1,17 @@
+// Dart imports:
 import 'dart:math';
 
-import 'package:ball_iq/components/datePicker.dart';
-import 'package:ball_iq/services/nbaStatsService.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:ball_iq/components/scoreBoard.dart';
 
-import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/state/state.dart';
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:ball_iq/common/constants.dart';
+import 'package:ball_iq/services/nbaStatsService.dart';
+import 'package:ball_iq/state/state.dart';
+import '../home/scoreBoard.dart';
 
 // Represents a specific game that can be selected for a montage.
 class MontageGameSelectWidget extends StatefulWidget {
@@ -40,7 +44,7 @@ class _IndividualGameSelection extends State<MontageGameSelectWidget> {
           border: Border(
               bottom: BorderSide(
                   color: isSelected || _isHovering
-                      ? themePrimary.withOpacity(0.50)
+                      ? brightText.withOpacity(0.50)
                       : Colors.transparent,
                   style: BorderStyle.solid,
                   width: 2.0)),
@@ -89,6 +93,7 @@ class GameSelection extends StatelessWidget {
             height: 140.0,
             padding:
                 EdgeInsets.only(top: 8), // 10 for padding, minus 2 for border
+            // width = either the entire page - 20 (and then scroll), or however long scores is
             width: min(
                 MediaQuery.of(context).size.width - 20, scores.length * 300.0),
             child: ListView.builder(

@@ -1,16 +1,20 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
+import 'package:ball_iq/components/common/background.dart';
 import 'common/constants.dart';
-import 'state/state.dart';
-import 'utils/screenUtils.dart';
-import 'components/frontPageTool.dart';
-import 'components/frontPageSearch.dart';
-import 'components/topBar.dart';
-import 'components/advertisement.dart';
+import 'components/home/advertisement.dart';
+import 'components/home/frontPageSearch.dart';
+import 'components/home/frontPageTool.dart';
+import 'components/home/topBar.dart';
 import 'components/montageMaker/montageMaker.dart';
 import 'services/nbaStatsService.dart';
+import 'state/state.dart';
+import 'utils/screenUtils.dart';
 
 void main() {
   //MobileAds.instance.initialize();
@@ -93,32 +97,12 @@ class HomePage extends StatelessWidget {
         // Layer 1: gif image.
         // Layer 2: gradient background.
         // Layer 3: Actual widgets for the site.
-        child: Stack(
-          children: [
-            // Layer 1: gif background.
-            Container(
-              height: MediaQuery.of(context).size.height - 40,
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-                image: DecorationImage(
-                  image: AssetImage("assets/dunk_background.gif"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            // Layer 2: gradient background.
-            Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [
-                    Colors.transparent,
-                    themePrimary.withAlpha(250),
-                  ])),
-            ),
-            // Layer 3: side widgets
-            SingleChildScrollView(
+        child: Background(
+            color: themePrimary,
+            child:
+                // Layer 1: gif background.
+                // Layer 3: side widgets
+                SingleChildScrollView(
               child: Column(
                 children: [
                   const TopBar(),
@@ -127,9 +111,7 @@ class HomePage extends StatelessWidget {
                   FrontPageDisplay(),
                 ],
               ),
-            )
-          ],
-        ),
+            )),
       ),
     );
   }

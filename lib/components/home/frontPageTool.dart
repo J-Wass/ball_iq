@@ -1,10 +1,14 @@
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
 import 'package:ball_iq/common/constants.dart';
-import 'package:ball_iq/state/state.dart';
 import 'package:ball_iq/services/nbaStatsService.dart';
+import 'package:ball_iq/state/state.dart';
 import 'package:ball_iq/utils/screenUtils.dart';
 
 class FrontPageToolData {

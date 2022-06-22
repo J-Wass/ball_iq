@@ -1,6 +1,7 @@
 from flask import Flask
 import requests
 import urllib.parse
+import re
 
 app = Flask(__name__)
 
@@ -38,9 +39,7 @@ def proxy(url):
       return cache[url]
 
     absolute_url = "https://" + urllib.parse.unquote(url)
-    print(absolute_url)
     data = requests.get(url=absolute_url, headers=stats_nba_headers, timeout=5).content
-    print(len(data))
     cache[url] = data
     return data
 
@@ -50,10 +49,13 @@ def proxyHeaderless(url):
       return cache[url]
 
     absolute_url = "https://" + urllib.parse.unquote(url)
-    print(absolute_url)
     data = requests.get(url=absolute_url, timeout=5).content
-    print(len(data))
     cache[url] = data
+
+    if absolute_url.endswith(".svg"):
+      teamId = re.match('.*nba\/(.*)\/primary.*', absolute_url).groups(0)[0]
+      with open(f"{teamId}.svg", "wb") as f:
+        f.write(data)
     return data
 
 @app.route("/")

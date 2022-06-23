@@ -31,6 +31,14 @@ class Scoreboard {
       this.team1Id, this.team2, this.team2Score, this.team2Id, this.gameId);
 }
 
+// Represents a stat name, and the regex used to search for.
+class Stat {
+  String statName = "";
+  String statRegex = "";
+
+  Stat(this.statName, this.statRegex);
+}
+
 /// Encapsulation of stats for a player in a game.
 class PlayerBoxScore {
   String gameId = "";
@@ -82,7 +90,6 @@ String _formattedUrl(String url, bool useStatsNbaHeaders) {
 }
 
 /// Returns a url pointing to an image file for a given team name.
-/// TODO find another source of team images, these svgs have <style> tags that can't be used.
 String teamImageUrl(String teamId) {
   return "assets/teams/$teamId.png";
 }

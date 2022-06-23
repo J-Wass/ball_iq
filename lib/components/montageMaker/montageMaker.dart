@@ -43,8 +43,15 @@ class MontageMaker extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Text("Montage Maker",
-                          style: TextStyle(fontSize: 32, color: brightText)),
+                      RichText(
+                          text: TextSpan(children: [
+                        WidgetSpan(
+                          child: Icon(Icons.movie, size: 38, color: brightText),
+                        ),
+                        TextSpan(
+                            text: " Montage Maker",
+                            style: TextStyle(fontSize: 32, color: brightText))
+                      ])),
                       DatePicker(),
                       GameSelection(),
                       PlayerSelection(),

@@ -59,17 +59,18 @@ class FrontPageScoreboardState with ChangeNotifier, DiagnosticableTreeMixin {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  // Sets whether the scoreboard is loading.
+  void markIsLoading(bool isLoading) {
+    _isLoading = isLoading;
+    notifyListeners();
+  }
+
   /// Sets the scoreboard data for the app.
   void set(List<Scoreboard> scoreboard, [bool isLoading = false]) {
     _scoreboard = scoreboard;
     _isLoading = isLoading;
     notifyListeners();
-  }
-
-  // Sets whether the scoreboard is loading.
-  void markIsLoading(bool isLoading) {
     _isLoading = isLoading;
-    notifyListeners();
   }
 }
 
@@ -81,9 +82,19 @@ class MontagePlayer with ChangeNotifier, DiagnosticableTreeMixin {
   String _playerName = "";
   String get playerName => _playerName;
 
-  void set(String playerId, String playerName) {
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  // Sets whether the scoreboard is loading.
+  void markIsLoading(bool isLoading) {
+    _isLoading = isLoading;
+    notifyListeners();
+  }
+
+  void set(String playerId, String playerName, [bool isLoading = false]) {
     _playerId = playerId;
     _playerName = playerName;
+    _isLoading = isLoading;
     notifyListeners();
   }
 }
@@ -96,19 +107,30 @@ class MontageGame with ChangeNotifier, DiagnosticableTreeMixin {
   List<PlayerBoxScore> _players = [];
   List<PlayerBoxScore> get players => _players;
 
-  void set(String gameId, List<PlayerBoxScore> players) {
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  // Sets whether the scoreboard is loading.
+  void markIsLoading(bool isLoading) {
+    _isLoading = isLoading;
+    notifyListeners();
+  }
+
+  void set(String gameId, List<PlayerBoxScore> players,
+      [bool isLoading = false]) {
     _gameId = gameId;
     _players = players;
+    _isLoading = isLoading;
     notifyListeners();
   }
 }
 
 /// Stores the selected stat for making a montage.
 class MontageStat with ChangeNotifier, DiagnosticableTreeMixin {
-  String _stat = "";
-  String get stat => _stat;
+  Stat? _stat = null;
+  Stat? get stat => _stat;
 
-  void set(String stat) {
+  void set(Stat stat) {
     _stat = stat;
     notifyListeners();
   }

@@ -67,8 +67,8 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    themePrimary.withOpacity(0.0),
-                    brightInactiveBackground.withOpacity(1),
+                    themePrimary.withOpacity(0.01),
+                    brightInactiveBackground,
                   ],
                 )),
             margin: EdgeInsets.only(bottom: 10),
@@ -83,10 +83,27 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
                   ),
                 ]),
                 Expanded(
-                  child: Text(
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
-                      widget.player.playername),
+                  child: Column(
+                    children: [
+                      Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          "${widget.player.playername}"),
+                      Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                          "${widget.player.points} pts"),
+                      Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                          "${widget.player.rebounds} rbs"),
+                      Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                          "${widget.player.assists} ast"),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -104,8 +121,12 @@ class PlayerSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<PlayerBoxScore> players = context.watch<MontageGame>().players;
+    players.sort((a, b) => (b.points + b.rebounds * 1.5 + b.assists * 2.5)
+        .compareTo(a.points + a.rebounds * 2 + a.assists * 3));
 
     var scrollController = ScrollController();
+
+    bool isLoading = context.watch<MontagePlayer>().isLoading;
 
     return Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -119,22 +140,29 @@ class PlayerSelection extends StatelessWidget {
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            height: 300.0,
+            height: 250.0,
             padding:
                 EdgeInsets.only(top: 8), // 10 for padding, minus 2 for border
             width: min(
                 MediaQuery.of(context).size.width - 20, players.length * 300.0),
-            child: ListView.builder(
-              controller: scrollController,
-              physics: BouncingScrollPhysics(),
-              itemCount: players.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (_, int i) {
-                return Container(
-                    margin: EdgeInsets.only(left: 5, right: 5, top: 5),
-                    child: MontagePlayerSelectWidget(player: players[i]));
-              },
-            ),
+            child: isLoading
+                ? const SizedBox(
+                    width: 30,
+                    child: Center(
+                      child: CircularProgressIndicator(color: themePrimary),
+                    ),
+                  )
+                : ListView.builder(
+                    controller: scrollController,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: players.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (_, int i) {
+                      return Container(
+                          margin: EdgeInsets.only(left: 5, right: 5, top: 5),
+                          child: MontagePlayerSelectWidget(player: players[i]));
+                    },
+                  ),
           ),
         ),
       ),

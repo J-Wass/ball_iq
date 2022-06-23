@@ -52,11 +52,13 @@ class _IndividualGameSelection extends State<MontageGameSelectWidget> {
         ),
         child: GestureDetector(
           onTap: () {
+            context.read<MontagePlayer>().markIsLoading(true);
             playerData(widget.scoreboard.gameId)
                 .then((List<PlayerBoxScore> players) {
               context
                   .read<MontageGame>()
                   .set(widget.scoreboard.gameId, players);
+              context.read<MontagePlayer>().markIsLoading(false);
             });
           },
           child: ScoreboardComponent(
@@ -79,6 +81,8 @@ class GameSelection extends StatelessWidget {
 
     var scrollController = ScrollController();
 
+    bool isLoading = context.watch<MontageGame>().isLoading;
+
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Scrollbar(
@@ -96,17 +100,25 @@ class GameSelection extends StatelessWidget {
             // width = either the entire page - 20 (and then scroll), or however long scores is
             width: min(
                 MediaQuery.of(context).size.width - 20, scores.length * 300.0),
-            child: ListView.builder(
-              controller: scrollController,
-              physics: BouncingScrollPhysics(),
-              itemCount: scores.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (_, int i) {
-                return Container(
-                    margin: EdgeInsets.only(left: 5, right: 5),
-                    child: MontageGameSelectWidget(scoreboard: scores[i]));
-              },
-            ),
+            child: isLoading
+                ? const SizedBox(
+                    width: 30,
+                    child: Center(
+                      child: CircularProgressIndicator(color: themePrimary),
+                    ),
+                  )
+                : ListView.builder(
+                    controller: scrollController,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: scores.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (_, int i) {
+                      return Container(
+                          margin: EdgeInsets.only(left: 5, right: 5),
+                          child:
+                              MontageGameSelectWidget(scoreboard: scores[i]));
+                    },
+                  ),
           ),
         ),
       ),

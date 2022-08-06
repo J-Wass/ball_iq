@@ -22,7 +22,7 @@ class MontageMaker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           title: const SelectableText('BBall IQ - Montage Maker'),
           backgroundColor: themePrimary,
@@ -38,13 +38,13 @@ class MontageMaker extends StatelessWidget {
             child: Center(
               child: Container(
                 margin: isTallScreen(context)
-                    ? EdgeInsets.only(top: 100)
-                    : EdgeInsets.only(top: 10),
+                    ? const EdgeInsets.only(top: 100)
+                    : const EdgeInsets.only(top: 10),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       RichText(
-                          text: TextSpan(children: [
+                          text: const TextSpan(children: [
                         WidgetSpan(
                           child: Icon(Icons.movie, size: 38, color: brightText),
                         ),
@@ -52,11 +52,31 @@ class MontageMaker extends StatelessWidget {
                             text: " Montage Maker",
                             style: TextStyle(fontSize: 32, color: brightText))
                       ])),
-                      DatePicker(),
-                      GameSelection(),
-                      PlayerSelection(),
-                      StatSelection(),
-                      Text("Go!")
+                      const DatePicker(),
+                      const GameSelection(),
+                      if (context.watch<MontageGame>().gameId != '')
+                        const PlayerSelection(),
+                      if (context.watch<MontagePlayer>().playerId != '')
+                        const StatSelection(),
+                      if (context.watch<MontageStat>().stat != null)
+                        TextButton.icon(
+                            icon: Icon(Icons.calendar_today_rounded),
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
+                              primary: darkText,
+                              backgroundColor: themePrimary.withOpacity(0.75),
+                            ),
+                            onPressed: () => {
+                                  // TODO: use https://pub.dev/packages/url_launcher to open the mp4 from rust service or something
+                                },
+                            label: Text(
+                              'Go!',
+                              style: TextStyle(fontSize: 16),
+                            ))
                     ],
                   ),
                 ),

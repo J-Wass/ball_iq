@@ -84,9 +84,17 @@ class StatSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Stat> stats = [
-      Stat("Score", "score"),
+      Stat("Buckets", "score"),
       Stat("Rebounds", "rebound"),
-      Stat("Assist", "assist")
+      Stat("Assists", "assist"),
+      Stat("Blocks", "block"),
+      Stat("Steals", "steal"),
+      Stat("Tipped Passes", "tip"),
+      Stat("Turnovers", "turnover"),
+      Stat("Misses", "miss"),
+      Stat("Personal Foul", "personal foul"),
+      Stat("Technical Foul", "technical foul"),
+      Stat("Flagrant Foul", "flagrant foul"),
     ];
 
     var scrollController = ScrollController();
@@ -103,7 +111,7 @@ class StatSelection extends StatelessWidget {
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            height: context.watch<MontagePlayer>().playerId == "" ? 0 : 250.0,
+            height: 250.0,
             padding:
                 EdgeInsets.only(top: 8), // 10 for padding, minus 2 for border
             width: min(

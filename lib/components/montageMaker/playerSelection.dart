@@ -57,20 +57,14 @@ class _IndividualPlayerSelection extends State<MontagePlayerSelectWidget> {
           },
           child: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50.0),
-                  topRight: Radius.circular(50.0),
-                  bottomLeft: Radius.circular(10.0),
-                  bottomRight: Radius.circular(10.0),
-                ),
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    themePrimary.withOpacity(0.01),
-                    brightInactiveBackground,
-                  ],
-                )),
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                themePrimary.withOpacity(0.00),
+                brightInactiveBackground,
+              ],
+            )),
             margin: EdgeInsets.only(bottom: 10),
             width: 150,
             child: Column(

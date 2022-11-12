@@ -104,15 +104,19 @@ class ScoreboardComponent extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.bold),
                         scoreboard.timeString),
-                    Container(
-                        child: Text(
-                            style: const TextStyle(fontSize: 15),
-                            scoreboard.team1Score)),
-                    Container(
-                        margin: const EdgeInsets.only(top: 25),
-                        child: Text(
-                            style: const TextStyle(fontSize: 15),
-                            scoreboard.team2Score)),
+                    scoreboard.team1Score != "null"
+                        ? Container(
+                            child: Text(
+                                style: const TextStyle(fontSize: 15),
+                                scoreboard.team1Score))
+                        : Container(),
+                    scoreboard.team2Score != "null"
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 25),
+                            child: Text(
+                                style: const TextStyle(fontSize: 15),
+                                scoreboard.team2Score))
+                        : Container(),
                   ]),
                 )
               ],

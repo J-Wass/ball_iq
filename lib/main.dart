@@ -42,9 +42,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // for testing only
     Future.delayed(const Duration(milliseconds: 1000), () {
-      context.read<DateSelect>().set(DateTime.parse("2022-03-11 00:00:00.000"));
+      context.read<DateSelect>().set(DateTime.parse("2022-11-12 00:00:00.000"));
       context.read<FrontPageScoreboardState>().markIsLoading(true);
-      gameData(DateTime.parse("2022-03-11 00:00:00.000"))
+      gameData(DateTime.parse("2022-11-12 00:00:00.000"))
           .then((List<Scoreboard> allGames) {
         context.read<FrontPageScoreboardState>().set(allGames);
 
@@ -93,16 +93,9 @@ class HomePage extends StatelessWidget {
       ),
       body: MouseRegion(
         cursor: SystemMouseCursors.precise,
-        // This part is wack. I use a stack to make a cool background.
-        // Layer 1: gif image.
-        // Layer 2: gradient background.
-        // Layer 3: Actual widgets for the site.
         child: Background(
             color: themePrimary,
-            child:
-                // Layer 1: gif background.
-                // Layer 3: side widgets
-                SingleChildScrollView(
+            child: SingleChildScrollView(
               child: Column(
                 children: [
                   const TopBar(),

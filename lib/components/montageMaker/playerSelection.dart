@@ -116,7 +116,7 @@ class PlayerSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     List<PlayerBoxScore> players = context.watch<MontageGame>().players;
     players.sort((a, b) => (b.points + b.rebounds * 1.5 + b.assists * 2.5)
-        .compareTo(a.points + a.rebounds * 2 + a.assists * 3));
+        .compareTo(a.points + a.rebounds * 1.5 + a.assists * 2.5));
 
     var scrollController = ScrollController();
 
